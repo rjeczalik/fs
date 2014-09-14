@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/rjeczalik/tools/fs"
+	"github.com/rjeczalik/fs"
 )
 
 type teefs struct {

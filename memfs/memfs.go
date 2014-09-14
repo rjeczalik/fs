@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rjeczalik/tools/fs"
+	"github.com/rjeczalik/fs"
 )
 
 // TODO(rjeczalik): do check Property for directory access and file read/write.

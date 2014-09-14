@@ -7,8 +7,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/rjeczalik/tools/fs"
-	"github.com/rjeczalik/tools/fs/memfs"
+	"github.com/rjeczalik/fs"
+	"github.com/rjeczalik/fs/memfs"
 )
 
 // Readpaths reads paths of all the files and directories of the 'dir' directory.

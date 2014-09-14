@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/rjeczalik/tools/fs/memfs"
+	"github.com/rjeczalik/fs/memfs"
 )
 
 var tree = memfs.Must(memfs.UnmarshalTab([]byte(".\n\ta\n\t\tb1\n\t\t\tc1\n\t\t\t\tc" +

@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/rjeczalik/tools/fs"
-	"github.com/rjeczalik/tools/fs/memfs"
+	"github.com/rjeczalik/fs"
+	"github.com/rjeczalik/fs/memfs"
 )
 
 var trees = []memfs.FS{
