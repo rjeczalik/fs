@@ -1,8 +1,4 @@
-language: go
-
-go:
- - 1.3.1
- - tip
+language: objective-c
 
 matrix:
   fast_finish: true
@@ -12,8 +8,14 @@ env:
     secure: hHPi/d+ob6oFvbGOfpfFgm2hvytx4S6+lby/8co0dDm/Tm7bmGUlt3BG5zcUqLq3b9Knnv1n7lAbMzBLjY+THg7RHMWNkA6OeM72MMjE4Kptq/XZUKVFJkTTFhBC7PTTMI5RDHkPStOv1AEIGpp0QtiHIkDZj5PtLrw+U0rWJEQ=
 
 install:
- - export GOBIN=$HOME/bin
- - export PATH=$GOBIN:$PATH
+ - bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+ - source $HOME/.gvm/scripts/gvm
+ - gvm install go1.3.1 --binary || gvm install go1.3.1
+ - gvm use go1.3.1
+ - export GOPATH=$HOME GOBIN=$HOME/bin PATH=$HOME/bin:$PATH
+ - mkdir -p ~/src/github.com
+ - mv ../../rjeczalik ~/src/github.com
+ - cd ~/src/github.com/rjeczalik/fs
  - go get code.google.com/p/go.tools/cmd/vet code.google.com/p/go.tools/cmd/cover github.com/mattn/goveralls github.com/modocache/gover
  - go get -t -v ./...
  - go install -a -race std
@@ -22,6 +24,6 @@ script:
  - go tool vet -all .
  - go build ./...
  - go test -race -v ./...
- - go list -f '{{if len .TestGoFiles}}go test -coverprofile={{.Dir}}/.coverprofile {{.ImportPath}}{{end}}' ./... | xargs -i sh -c {}
+ - go list -f '{{if len .TestGoFiles}}"go test -coverprofile={{.Dir}}/.coverprofile {{.ImportPath}}"{{end}}' ./... | xargs sh -c
  - gover
  - goveralls -coverprofile=gover.coverprofile -service=travis-ci -repotoken $COVERALLS_TOKEN
