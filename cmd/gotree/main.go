@@ -12,7 +12,7 @@
 //     gotree [OPTION]... [DIRECTORY]
 //
 //   OPTIONS:
-//     -a          All files are listed
+//     -a             Lists also hidden files and directories
 //     -d          List directories only
 //     -L  level   Descend only <level> directories deep
 //     -go width   Output as Go literal with specified maximum column width
@@ -53,10 +53,10 @@ const usage = `NAME:
 	gotree - Go implementation of the Unix tree command
 
 USAGE:
-	gotree [OPTION]... [DIRECTORY]
+	gotree [OPTION]... [DIRECTORY=.]
 
 OPTIONS:
-	-a             Lists also hidden files
+	-a             Lists also hidden files and directories
 	-d             Lists directories only
 	-L   level     Descends only <level> directories deep
 	-go  width     Output tree as Go literal with the specified column width

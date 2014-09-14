@@ -4,16 +4,17 @@
 // Usage
 //
 //   NAME:
-//   	mktree - mirrors a file tree when pipped to gotree command
+//     mktree - mirrors a file tree when pipped to gotree command
 //
 //   USAGE:
-//   	mktree [-h] [-o=.|dir] [-d] [<file>]
+//     mktree [OPTION]... [FILE]
 //
 //   OPTIONS:
-//   	-o <dir>  Destination directory - defaults to current directory
-//   	-d        Create directories only
-//   	-h        Print usage information
-//   	<file>    Read tree output from the file instead of standard input
+//     -a          Creates also hidden files and directories
+//     -o <dir=.>  Destination directory - defaults to current directory
+//     -d          Create directories only
+//     -h          Print usage information
+//     FILE        Read tree output from the file instead of standard input
 //
 // Example
 //
@@ -68,20 +69,24 @@ import (
 	"github.com/rjeczalik/fs/memfs"
 )
 
+const sep = string(os.PathSeparator)
+
 const usage = `NAME:
 	mktree - mirrors a file tree when pipped to gotree command
 
 USAGE:
-	mktree [-h] [-o=.|dir] [-d] [<file>]
+	mktree [OPTION]... [FILE]
 
 OPTIONS:
-	-o <dir>  Destination directory - defaults to current directory
-	-d        Create directories only
-	-h        Print usage information
-	<file>    Read tree output from the file instead of standard input`
+	-a          Creates also hidden files and directories
+	-o <dir=.>  Destination directory - defaults to current directory
+	-d          Create directories only
+	-h          Print usage information
+	FILE        Read tree output from the file instead of standard input`
 
 var (
 	dironly bool
+	all     bool
 	output  string
 )
 
@@ -94,10 +99,17 @@ func die(v interface{}) {
 
 func init() {
 	output, _ = os.Getwd()
+	flags.BoolVar(&all, "a", false, "")
 	flags.StringVar(&output, "o", output, "")
 	flags.BoolVar(&dironly, "d", false, "")
 	flags.Usage = func() { fmt.Println(usage) }
 	flags.Parse(os.Args[1:])
+}
+
+func cp(lhs, rhs fs.Filesystem, all bool, out string) {
+	fs := fsutil.TeeFilesystem(lhs, fsutil.RelFilesystem(rhs, out))
+	c := fsutil.Control{FS: fs, Hidden: all}
+	c.Find(sep, 0)
 }
 
 func main() {
@@ -117,8 +129,5 @@ func main() {
 	if err != nil {
 		die(err)
 	}
-	(fsutil.Control{
-		FS:     fsutil.TeeFilesystem(tree, fsutil.RelFilesystem(fs.Default, output)),
-		Hidden: true,
-	}).Find(string(os.PathSeparator), 0)
+	cp(tree, fs.Default, all, output)
 }
