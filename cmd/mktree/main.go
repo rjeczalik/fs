@@ -62,9 +62,9 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 
 	"github.com/rjeczalik/fs"
+	"github.com/rjeczalik/fs/fsutil"
 	"github.com/rjeczalik/fs/memfs"
 )
 
@@ -117,35 +117,8 @@ func main() {
 	if err != nil {
 		die(err)
 	}
-	fn := func(path string, fi os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		dst := filepath.Join(output, path)
-		dstfi, err := os.Stat(dst)
-		if err == nil {
-			if fi.IsDir() != dstfi.IsDir() {
-				err = fmt.Errorf("create: %s already exists", dst)
-			}
-			return err
-		}
-		if base := filepath.Join(output, filepath.Dir(path)); base != dst {
-			// TODO(rjeczalik): dir mode, not base
-			if err = fs.MkdirAll(base, fi.Mode()); err != nil {
-				return err
-			}
-		}
-		if fi.IsDir() {
-			err = fs.Mkdir(dst, fi.Mode())
-		} else {
-			var f fs.File
-			if f, err = fs.Create(dst); err == nil {
-				err = f.Close()
-			}
-		}
-		return err
-	}
-	if err = tree.Walk(string(os.PathSeparator), fn); err != nil {
-		die(err)
-	}
+	(fsutil.Control{
+		FS:     fsutil.TeeFilesystem(tree, fsutil.RelFilesystem(fs.Default, output)),
+		Hidden: true,
+	}).Find(string(os.PathSeparator), 0)
 }
