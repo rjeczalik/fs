@@ -134,12 +134,12 @@ func (tf teefile) Readdir(n int) (fi []os.FileInfo, err error) {
 	if fi, err = tf.File.Readdir(n); err != nil {
 		return
 	}
+	var f fs.File
 	for _, fi := range fi {
 		path := filepath.Join(tf.dir, filepath.Base(fi.Name()))
 		if fi.IsDir() {
 			err = tf.write.Mkdir(path, fi.Mode())
 		} else {
-			var f fs.File
 			if f, err = tf.write.Create(path); err == nil {
 				f.Close()
 			}

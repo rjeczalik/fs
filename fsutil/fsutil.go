@@ -206,12 +206,12 @@ func (c Control) Intersect(src, dir string) []string {
 			dirs[pop] = struct{}{}
 			continue
 		}
-	LOOP:
+	Loop:
 		for i := range subdir {
 			for j := range subsrc {
 				if subdir[i] == subsrc[j] {
 					glob = append(glob, filepath.Join(pop, subdir[i]))
-					continue LOOP
+					continue Loop
 				}
 			}
 			dirs[pop] = struct{}{}

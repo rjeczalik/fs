@@ -7,6 +7,37 @@ import (
 	"github.com/rjeczalik/fs/memfs"
 )
 
+// .
+// ├── a
+// │   ├── b1
+// │   │   ├── c1
+// │   │   │   └── c1.txt
+// │   │   ├── c2
+// │   │   │   └── c2.txt
+// │   │   └── c3
+// │   │       ├── c3.txt
+// │   │       └── d1
+// │   │           └── e1
+// │   │               ├── _
+// │   │               │   └── _.txt
+// │   │               ├── e/
+// │   │               ├── e1.txt
+// │   │               └── e2.txt
+// │   └── b2
+// │       └── c1
+// │           ├── d1.txt
+// │           ├── d2/
+// │           └── d3.txt
+// ├── a.txt
+// └── w
+//     ├── w.txt
+//     └── x
+//         ├── y
+//         │   └── z
+//         │       └── 1.txt
+//         └── y.txt
+//
+// TODO(rjeczalik): Move to fixture_test.
 var tree = memfs.Must(memfs.UnmarshalTab([]byte(".\n\ta\n\t\tb1\n\t\t\tc1\n\t\t\t\tc" +
 	"1.txt\n\t\t\tc2\n\t\t\t\tc2.txt\n\t\t\tc3\n\t\t\t\tc3.txt\n\t\t\t\t" +
 	"d1\n\t\t\t\t\te1\n\t\t\t\t\t\t_\n\t\t\t\t\t\t\t_.txt\n\t\t\t\t\t\te" +
@@ -54,25 +85,25 @@ func TestTeeOpen(t *testing.T) {
 			read: []string{"/w", "/w/x/y", "/w/x/y/z", "/w/x"},
 			fs:   []byte(".\nw\n\tw.txt\n\tx\n\t\ty\n\t\t\tz\n\t\t\t\t1.txt\n\t\ty.txt"),
 		}}
-LOOP:
+Test:
 	for i, cas := range cases {
 		spy := memfs.New()
 		tee := TeeFilesystem(tree, spy)
 		for j, path := range cas.open {
 			if _, err := tee.Open(filepath.FromSlash(path)); err != nil {
 				t.Errorf("want err=nil; got %q (i=%d, j=%d)", err, i, j)
-				continue LOOP
+				continue Test
 			}
 		}
 		for j, path := range cas.read {
 			f, err := tee.Open(filepath.FromSlash(path))
 			if err != nil {
 				t.Errorf("want err=nil; got %q (i=%d, j=%d)", err, i, j)
-				continue LOOP
+				continue Test
 			}
 			if _, err = f.Readdir(0); err != nil {
 				t.Errorf("want err=nil; got %q (i=%d, j=%d)", err, i, j)
-				continue LOOP
+				continue Test
 			}
 		}
 		if !memfs.Equal(spy, memfs.Must(memfs.UnmarshalTab(cas.fs))) {

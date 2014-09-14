@@ -60,11 +60,11 @@ func Fsck(fs FS) bool {
 	)
 	for len(glob) > 0 {
 		dir, glob = glob[len(glob)-1], glob[:len(glob)-1]
-	LOOP:
+	Loop:
 		for k, v := range dir {
 			if k == "" {
 				if _, ok := v.(Property); ok {
-					continue LOOP
+					continue Loop
 				}
 				return false
 			}
