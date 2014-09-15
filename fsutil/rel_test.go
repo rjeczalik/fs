@@ -1,14 +1,11 @@
 package fsutil
 
 import (
-	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/rjeczalik/fs/memfs"
 )
-
-const sep = string(os.PathSeparator)
 
 func dirlen(d memfs.Directory) (n int) {
 	n = len(d)
