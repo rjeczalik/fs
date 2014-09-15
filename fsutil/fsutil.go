@@ -11,6 +11,8 @@ import (
 	"github.com/rjeczalik/fs/memfs"
 )
 
+const sep = string(os.PathSeparator)
+
 // Readpaths reads paths of all the files and directories of the 'dir' directory.
 // If none files were found, the 'files' slice will be nil. If none directories
 // were found, the 'dirs' slice will be nil. If the 'dir' was empty or error
@@ -72,6 +74,13 @@ func Intersect(src, dir string) []string {
 // On success it returns full paths for files and directories it found.
 func Find(dir string, n int) []string {
 	return Default.Find(dir, n)
+}
+
+// Copy copies directory tree structure from the path of the lhs to the root
+// directory of the rhs filesystem. It returns sum of files and directories
+// copied.
+func Copy(lhs, rhs fs.Filesystem) int {
+	return len((Control{FS: TeeFilesystem(lhs, rhs), Hidden: true}).Find(sep, 0))
 }
 
 // Control is the package control structure, allows for altering the behavior
