@@ -222,7 +222,7 @@ func TestCatchSpy(t *testing.T) {
 			spy := memfs.New()
 			for j, fs := range []fs.Filesystem{
 				0: cas.c.FS,
-				1: TeeFilesystem(cas.c.FS, spy),
+				1: Tee(cas.c.FS, spy),
 				2: spy,
 			} {
 				c := cas.c

@@ -46,7 +46,7 @@ func (rf relfs) Walk(p string, fn filepath.WalkFunc) error {
 
 // RelFilesystem returns a filesystem which prepends rel to each path passed to
 // the fs.Filesystem methods it implements.
-func RelFilesystem(fs fs.Filesystem, rel string) fs.Filesystem {
+func Rel(fs fs.Filesystem, rel string) fs.Filesystem {
 	return relfs{
 		rel: rel,
 		fs:  fs,

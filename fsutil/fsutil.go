@@ -80,7 +80,7 @@ func Find(dir string, n int) []string {
 // directory of the rhs filesystem. It returns sum of files and directories
 // copied.
 func Copy(lhs, rhs fs.Filesystem) int {
-	return len((Control{FS: TeeFilesystem(lhs, rhs), Hidden: true}).Find(sep, 0))
+	return len((Control{FS: Tee(lhs, rhs), Hidden: true}).Find(sep, 0))
 }
 
 // Control is the package control structure, allows for altering the behavior
@@ -255,7 +255,7 @@ func (c Control) IntersectInclude(src, dir string) map[string][]string {
 	var (
 		old = c.FS
 		spy = memfs.New()
-		tee = TeeFilesystem(old, spy)
+		tee = Tee(old, spy)
 	)
 	c.FS = tee
 	dirs := c.Intersect(src, dir)

@@ -107,7 +107,7 @@ func init() {
 }
 
 func cp(lhs, rhs fs.Filesystem, all bool, out string) {
-	fs := fsutil.TeeFilesystem(lhs, fsutil.RelFilesystem(rhs, out))
+	fs := fsutil.Tee(lhs, fsutil.Rel(rhs, out))
 	c := fsutil.Control{FS: fs, Hidden: all}
 	c.Find(sep, 0)
 }

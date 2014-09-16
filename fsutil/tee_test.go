@@ -88,7 +88,7 @@ func TestTeeOpen(t *testing.T) {
 Test:
 	for i, cas := range cases {
 		spy := memfs.New()
-		tee := TeeFilesystem(tree, spy)
+		tee := Tee(tree, spy)
 		for j, path := range cas.open {
 			if _, err := tee.Open(filepath.FromSlash(path)); err != nil {
 				t.Errorf("want err=nil; got %q (i=%d, j=%d)", err, i, j)

@@ -55,7 +55,7 @@ func TestRelFilesystem(t *testing.T) {
 			//
 			// Which should probably hit memfs/util.go file eventually.
 			exp, spy := move(tree, cas), memfs.New()
-			(Control{FS: TeeFilesystem(tree, RelFilesystem(spy, cas)), Hidden: true}).Find(sep, 0)
+			(Control{FS: Tee(tree, Rel(spy, cas)), Hidden: true}).Find(sep, 0)
 			if !memfs.Equal(spy, exp) {
 				t.Errorf("want spy=exp (cas=%s, i=%d)", cas, i)
 			}

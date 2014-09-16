@@ -137,7 +137,7 @@ func main() {
 		printroot = false
 	}
 	root = filepath.Clean(root)
-	(fsutil.Control{FS: fsutil.TeeFilesystem(fs.FS{}, spy), Hidden: all}).Find(root, lvl)
+	(fsutil.Control{FS: fsutil.Tee(fs.FS{}, spy), Hidden: all}).Find(root, lvl)
 	spy, err := spy.Cd(root)
 	if err != nil {
 		die(err) // TODO(rjeczalik): improve error message

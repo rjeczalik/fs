@@ -154,7 +154,7 @@ func (tf teefile) Readdir(n int) (fi []os.FileInfo, err error) {
 // the call was sucessful.
 // TeeFilesystem can be used as a spy for recording file and/or directory access
 // of the 'read' filesystem.
-func TeeFilesystem(read, write fs.Filesystem) fs.Filesystem {
+func Tee(read, write fs.Filesystem) fs.Filesystem {
 	return teefs{
 		read:  read,
 		write: write,
