@@ -55,7 +55,7 @@ func TestRel(t *testing.T) {
 			//
 			// Which should probably hit memfs/util.go file eventually.
 			exp, spy := move(tree, cas), memfs.New()
-			if n := Copy(tree, RelFilesystem(spy, cas)); n == 0 {
+			if n := Copy(tree, Rel(spy, cas)); n == 0 {
 				t.Errorf("want n!=0 (cas=%s, i=%d)", cas, i)
 				continue
 			}

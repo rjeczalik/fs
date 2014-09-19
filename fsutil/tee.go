@@ -148,11 +148,11 @@ func (tf teefile) Readdir(n int) (fi []os.FileInfo, err error) {
 	return
 }
 
-// TeeFilesystem returns a filesystem which writes file tree read from 'read'
+// Tee returns a filesystem which writes file tree read from 'read'
 // filesystem in the 'write' one. Every path passed to the Open, Create, Mkdir,
 // MkdirAll and Readdir methods is created on the 'write' filesystem only if
 // the call was sucessful.
-// TeeFilesystem can be used as a spy for recording file and/or directory access
+// Tee can be used as a spy for recording file and/or directory access
 // of the 'read' filesystem.
 func Tee(read, write fs.Filesystem) fs.Filesystem {
 	return teefs{

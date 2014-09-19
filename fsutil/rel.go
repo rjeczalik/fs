@@ -44,7 +44,7 @@ func (rf relfs) Walk(p string, fn filepath.WalkFunc) error {
 	return rf.fs.Walk(filepath.Join(rf.rel, p), fn)
 }
 
-// RelFilesystem returns a filesystem which prepends rel to each path passed to
+// Rel returns a filesystem which prepends rel to each path passed to
 // the fs.Filesystem methods it implements.
 func Rel(fs fs.Filesystem, rel string) fs.Filesystem {
 	return relfs{
