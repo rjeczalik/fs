@@ -16,7 +16,7 @@ func dirlen(d memfs.Directory) (n int) {
 }
 
 // TODO(rjeczalik)
-func ExampleRelFilesystem() {
+func ExampleRel() {
 	// Output:
 }
 
@@ -34,7 +34,7 @@ func move(fs memfs.FS, off string) memfs.FS {
 	return mv
 }
 
-func TestRelFilesystem(t *testing.T) {
+func TestRel(t *testing.T) {
 	// To randomize.
 	cases := map[string]struct{}{
 		"/":                      {},
@@ -55,7 +55,10 @@ func TestRelFilesystem(t *testing.T) {
 			//
 			// Which should probably hit memfs/util.go file eventually.
 			exp, spy := move(tree, cas), memfs.New()
-			(Control{FS: Tee(tree, Rel(spy, cas)), Hidden: true}).Find(sep, 0)
+			if n := Copy(tree, RelFilesystem(spy, cas)); n == 0 {
+				t.Errorf("want n!=0 (cas=%s, i=%d)", cas, i)
+				continue
+			}
 			if !memfs.Equal(spy, exp) {
 				t.Errorf("want spy=exp (cas=%s, i=%d)", cas, i)
 			}
