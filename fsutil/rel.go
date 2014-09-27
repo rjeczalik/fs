@@ -55,11 +55,13 @@ func (rf relfs) Walk(p string, fn filepath.WalkFunc) error {
 
 func (rf relfs) walkfunc(fn filepath.WalkFunc) filepath.WalkFunc {
 	return func(p string, fi os.FileInfo, err error) error {
-		rfi := relfi{
-			FileInfo: fi,
-			p:        filepath.Join(rf.rel, fi.Name()),
+		if fi != nil {
+			fi = relfi{
+				FileInfo: fi,
+				p:        filepath.Join(rf.rel, fi.Name()),
+			}
 		}
-		return fn(filepath.Join(rf.rel, p), rfi, err)
+		return fn(filepath.Join(rf.rel, p), fi, err)
 	}
 }
 

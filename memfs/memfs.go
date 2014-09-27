@@ -307,7 +307,7 @@ func (fs FS) Stat(name string) (os.FileInfo, error) {
 func (fs FS) Walk(root string, fn filepath.WalkFunc) (err error) {
 	dir, perr := fs.lookup(root)
 	if perr != nil {
-		fn(root, nil, err)
+		fn(root, nil, perr)
 		return perr
 	}
 	if err = fn(root, fileinfo{readproperty(dir), root, 0, true}, nil); err != nil {
@@ -369,7 +369,9 @@ func (fs FS) lookup(p string) (dir Directory, perr *os.PathError) {
 		}
 		return true
 	}
-	fs.dirwalk(p, fn)
+	if fs.dirwalk(p, fn); perr != nil {
+		perr.Path = p
+	}
 	return
 }
 
