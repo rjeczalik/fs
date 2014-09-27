@@ -303,4 +303,15 @@ var trees = []memfs.FS{
 		"\t\t3.txt\n\t\t\t2.txt\n\t\tefg\n\t\t\t.hij\n\t\t\t\t.txt\n\t\t\t\t" +
 		"txt\n\t\t\t.hij.txt\n\t\t\thij\n\t\t\t\t.txt\n\t\t\t\ttxt\n\t\t\thi" +
 		"j.txt\n\t\tefg.txt\n\tabc.txt\n"))),
+	// .
+	// ├── dir
+	// │   ├── dir
+	// │   │   ├── dir/
+	// │   │   └── file
+	// │   └── file
+	// └── file
+	//
+	// 3 directories, 3 files
+	4: memfs.Must(memfs.UnmarshalTab([]byte(".\n\tdir\n\t\tdir\n\t\t\tdir/\n\t" +
+		"\t\tfile\n\t\tfile\n\tfile\n"))),
 }

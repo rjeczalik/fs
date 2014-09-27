@@ -7,6 +7,15 @@ import (
 	"github.com/rjeczalik/fs"
 )
 
+type relfi struct {
+	os.FileInfo
+	p string
+}
+
+func (rfi relfi) Name() string {
+	return rfi.p
+}
+
 type relfs struct {
 	rel string // store path + separator and just use rf.rel + p?
 	fs  fs.Filesystem
@@ -41,7 +50,17 @@ func (rf relfs) Stat(p string) (os.FileInfo, error) {
 }
 
 func (rf relfs) Walk(p string, fn filepath.WalkFunc) error {
-	return rf.fs.Walk(filepath.Join(rf.rel, p), fn)
+	return rf.fs.Walk(p, rf.walkfunc(fn))
+}
+
+func (rf relfs) walkfunc(fn filepath.WalkFunc) filepath.WalkFunc {
+	return func(p string, fi os.FileInfo, err error) error {
+		rfi := relfi{
+			FileInfo: fi,
+			p:        filepath.Join(rf.rel, fi.Name()),
+		}
+		return fn(filepath.Join(rf.rel, p), rfi, err)
+	}
 }
 
 // Rel returns a filesystem which prepends rel to each path passed to
