@@ -123,7 +123,7 @@ func TestRelWalk(t *testing.T) {
 	for i, cas := range cases {
 		p, fi = p[:0], fi[:0]
 		if err := Rel(trees[4], filepath.FromSlash(cas.rel)).Walk(sep, fn); err != nil {
-			t.Errorf("want err=nil; got err (i=%d)", err, i)
+			t.Errorf("want err=nil; got %v (i=%d)", err, i)
 			continue
 		}
 		if m, n, o := len(p), len(fi), len(cas.p); m != n || n != o {
