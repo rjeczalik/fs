@@ -134,7 +134,7 @@ func TestRelWalk(t *testing.T) {
 			if p[j] != fi[j] {
 				t.Errorf("want p=fi; got p=%q, fi=%q (i=%d, j=%d)", p[j], fi[j], i, j)
 			}
-			if _, ok := cas.p[p[j]]; !ok {
+			if _, ok := cas.p[filepath.ToSlash(p[j])]; !ok {
 				t.Errorf("%q not found in cas.p (i=%d, j=%d)", p[j], i, j)
 			}
 		}
