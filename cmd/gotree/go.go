@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/rjeczalik/fs/memfs"
-	"github.com/rjeczalik/tools/rw"
+	"github.com/rjeczalik/rw"
 )
 
 var (
