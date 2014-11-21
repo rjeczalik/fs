@@ -461,12 +461,18 @@ func (d directory) Readdir(n int) (fi []os.FileInfo, err error) {
 	if n > 0 {
 		return nil, errors.New("Readdir: not implemented")
 	}
-	fi = make([]os.FileInfo, 0, len(d.d))
-	for k, v := range d.d {
+	names := make([]string, 0, len(d.d))
+	for k := range d.d {
 		// Ignore special empty key.
 		if k == "" {
 			continue
 		}
+		names = append(names, k)
+	}
+	sort.Strings(names)
+	fi = make([]os.FileInfo, 0, len(names))
+	for _, k := range names {
+		v := d.d[k]
 		if f, ok := v.(File); ok {
 			fi = append(fi, fileinfo{
 				readproperty(v),
