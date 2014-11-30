@@ -388,7 +388,7 @@ func TestReaddir(t *testing.T) {
 		for _, it := range cas {
 			s := filepath.Join(path, it.name)
 			for _, fi := range fi {
-				if fi.Name() == s {
+				if fi.Name() == filepath.Base(s) {
 					if fi.IsDir() != it.dir {
 						t.Errorf("want fi.IsDir()=%v; got %v (path=%q)", it.dir, fi.IsDir(), s)
 					}

@@ -475,17 +475,17 @@ func (d directory) Readdir(n int) (fi []os.FileInfo, err error) {
 		v := d.d[k]
 		if f, ok := v.(File); ok {
 			fi = append(fi, fileinfo{
-				readproperty(v),
-				filepath.Join(d.s, k),
-				int64(len(f.Content)),
-				false,
+				p: readproperty(v),
+				s: k,
+				n: int64(len(f.Content)),
+				d: false,
 			})
 		} else {
 			fi = append(fi, fileinfo{
-				readproperty(v),
-				filepath.Join(d.s, k),
-				0,
-				true,
+				p: readproperty(v),
+				s: k,
+				n: 0,
+				d: true,
 			})
 		}
 	}
